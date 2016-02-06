@@ -9,20 +9,18 @@ import Array exposing (length)
 
 -- main : Signal Html.Html
 main =
-    let
-        actions = Signal.mailbox Increment
-
-        newTimeOldTimePairSignal = Signal.foldp newTimeOldTimePairJob (1454745969,0) (every millisecond)
-        newTimeOldTimePairJob newTime (oldTime, _) = (newTime, oldTime)
-
-        timeSignal = Signal.map (\(newTime, oldTime) -> newTime - oldTime)newTimeOldTimePairSignal
-
-        signal : Signal Input
-        signal = Signal.merge (Signal.map Left actions.signal) (Signal.map Right (timeSignal))
+    let actions = Signal.mailbox Increment
+        dropOldTime newTime (oldTime, _) = (newTime, oldTime)
+        timeDelta (newTime, oldTime)     = newTime - oldTime
+        timePairSignal = every millisecond
+                      |> Signal.foldp dropOldTime (1454745969,0)
+        signal =
+            Signal.merge
+                (Signal.map Left actions.signal)
+                (Signal.map (timeDelta >> Right) timePairSignal)
 
         modelSignal = Signal.foldp update model signal
-    in
-        Signal.map (view actions.address) modelSignal
+    in Signal.map (view actions.address) modelSignal
 
 update : Input -> (Model -> Model)
 update input (index, time, bpm) =
