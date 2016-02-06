@@ -29,14 +29,17 @@ update input (index, time, bpm) =
     case input of
         Left action ->
             case action of
-                Increment -> ((index + 1) % length tones, time, bpm)
-                Decrement -> ((index - 1) % length tones, time, bpm)
+                Increment -> (toneIndexAdd index 1, time, bpm)
+                Decrement -> (toneIndexAdd index -1, time, bpm)
                 SetTempo newBpm  -> (index, time, newBpm)
         Right delta ->
             let msPerBeat = 60000 // bpm
                 increaseIndexBy = if truncate (time+delta) >= msPerBeat then 1 else 0
-            in ((index+increaseIndexBy) % length tones
-                , toFloat (truncate (time+delta) % msPerBeat)
-                , bpm)
+            in ( toneIndexAdd index increaseIndexBy
+               , toFloat (truncate (time+delta) % msPerBeat)
+               , bpm
+               )
 
-
+toneIndexAdd : Int -> Int -> Int
+toneIndexAdd a b =
+    (a + b) % length tones
