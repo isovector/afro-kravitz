@@ -5,25 +5,33 @@ import Model exposing (..)
 
 import Graphics.Element exposing (Element (..), show, flow, right, down, centered, spacer)
 import Graphics.Collage exposing (Form (..), collage, toForm, text)
-import Graphics.Input.Field exposing (field, noContent, defaultStyle)
+import Graphics.Input.Field exposing (field, noContent, defaultStyle, Direction (Forward), Content)
 import ParseInt exposing (parseInt)
 import List exposing (concat)
 import Array exposing (fromList, get, length, map, toList)
 import Color exposing (red)
 import Text exposing (Text (..), fromString, color)
 
-view : Signal.Address Action -> Model -> Element
-view address model =
-    flow down [viewChords model, showUi address]
+view : Signal.Address Action -> Model -> Content -> Element
+view address model content = (view2 address model) (showUi content)
+
+view2 : Signal.Address Action -> Model -> Element -> Element
+view2 address model bpmInput =
+    flow down [viewChords model, bpmInput]
     
-showUi : Signal.Address Action -> Element
-showUi address  = 
-    let onBpmChange s = (case parseInt s.string of
-            Ok newBpm -> SetTempo newBpm
-            Err _     -> SetTempo 1
-        ) |> Signal.message address
-    in field defaultStyle onBpmChange "BPM" noContent
+bpmMailbox : Signal.Mailbox Content
+bpmMailbox = Signal.mailbox noContent    
+ 
+showUi : Content -> Element
+showUi content  = 
+    (field defaultStyle (Signal.message bpmMailbox.address) "BPM" content)
     
+bpmSignal : Signal Int
+bpmSignal = let onBpmChange s = (case parseInt s.string of
+                Ok newBpm -> newBpm
+                Err _     -> 1
+            )
+            in Signal.map onBpmChange bpmMailbox.signal
     
 redText : Int -> Tone -> List Element
 redText index chord =
