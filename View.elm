@@ -50,6 +50,6 @@ redText index chord =
     in [label, spacer 10 1]
 
 viewChords : Model -> Element
-viewChords (index, time) =
+viewChords (index, time, beatNum) =
     let layout = flow right (toList (Array.map (\tone -> redText index tone) tones) |> concat)
     in [toForm layout] |> collage canvasWidth canvasHeight
