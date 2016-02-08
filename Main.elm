@@ -19,7 +19,8 @@ main =
                 (Signal.map Left actions.signal)
                 (Signal.map (timeDelta >> Right) timePairSignal)
 
-        modelSignal = Signal.foldp update model (Signal.map2 (\i b -> (i,b)) signal bpmSignal)
+        modelSignal = Signal.map2 (,) signal bpmSignal
+                   |> Signal.foldp update model
     in Signal.map2 (view actions.address) modelSignal bpmMailbox.signal
 
 update : (Input, Int) -> Model -> Model
