@@ -1,5 +1,5 @@
 module KeyUtils
-    ( keyToInt
+    ( getScaleKey
     ) where
 
 import Types exposing (..)
@@ -18,4 +18,7 @@ genEnumFuncs es =
 
 (keyToInt, intToKey) = genEnumFuncs keys
 (scaleNoteToInt, intToScaleNote) = genEnumFuncs scaleNotes
+
+getScaleKey : Key -> ScaleNote -> Key
+getScaleKey k n = intToKey <| (keyToInt k + scaleNoteToInt n) % List.length keys
 
