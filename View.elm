@@ -2,7 +2,7 @@ module View where
 
 import Types exposing (..)
 import Model exposing (..)
-import ChordDrawing exposing (fretboard)
+import ChordDrawing exposing (..)
 
 import Graphics.Element exposing (Element (..), height, left, beside, midBottom, rightAligned, show, flow, right, down, centered, spacer, container, middle)
 import Graphics.Collage exposing (Form (..), collage, toForm, text, group)
@@ -53,4 +53,4 @@ redText index chord =
 viewChords : Model -> Element
 viewChords (index, time, beatNum) =
     let layout = flow right (toList (Array.map (\tone -> redText index tone) tones) |> concat)
-    in [fretboard, toForm layout] |> collage canvasWidth canvasHeight
+    in [fretboard, drawChord cChord, toForm layout] |> collage canvasWidth canvasHeight

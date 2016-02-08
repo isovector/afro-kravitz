@@ -1,5 +1,7 @@
 module ChordDrawing
     ( fretboard
+    , drawChord
+    , cChord
     ) where
 
 import Types exposing (..)
@@ -23,11 +25,11 @@ stringWidth n = toFloat n * 0.5
 fretY : Float -> Float
 fretY n = (n - 2) * -fretSpacing
 
-fretWidth : Int -> Float
+fretWidth : Fret -> Float
 fretWidth n = if n == 0 then 4 else 2
 
-fingerCircle : Int -> Int -> GString -> Form
-fingerCircle f fret s =
+drawFinger : Int -> Fret -> GString -> Form
+drawFinger f fret s =
     let circ = circle fingerRadius
             |> filled fingerColor
         num = toString f |> fromString |> text |> moveY 2
@@ -35,8 +37,8 @@ fingerCircle f fret s =
        |> moveX (stringX s)
        |> moveY (fretY (toFloat fret - 0.5))
 
-barre : Int -> Int -> GString -> GString -> Form
-barre f fret n1 n2 =
+drawBarre : Int -> Fret -> GString -> GString -> Form
+drawBarre f fret n1 n2 =
     let first = min n1 n2
         second = max n1 n2
         firstX = stringX first
@@ -54,6 +56,14 @@ barre f fret n1 n2 =
        ]
        |> group |> moveY (fretY (toFloat fret - 0.5))
 
+drawFingering : Fingering -> Form
+drawFingering fingering = case fingering of
+    Finger finger fret string -> drawFinger finger fret string
+    Barre  finger fret str1 str2 -> drawBarre finger fret str1 str2
+
+drawChord : Chord -> Form
+drawChord c = List.map drawFingering c |> group
+
 fretboard : Form
 fretboard =
     let width = 90
@@ -67,9 +77,12 @@ fretboard =
     in [ rect width height |> filled grey
        ] ++ List.map makeFret [0..4]
          ++ List.map makeString [1..6]
-         ++ [ barre 1 2 5 1
-            , fingerCircle 2 3 2
-            , fingerCircle 3 4 3
-            , fingerCircle 4 4 4
-            ] |> group
+         |> group
+
+cChord : Chord
+cChord = [ Barre 1 2 5 1
+         , Finger 2 3 2
+         , Finger 3 4 3
+         , Finger 4 4 4
+         ]
 
