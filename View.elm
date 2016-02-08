@@ -18,8 +18,8 @@ canvasHeight = 200
 
 inputHeight = 20
 
-render : Signal.Address Action -> Model -> Content -> Element
-render address model content =
+render : Model -> Content -> Element
+render model content =
     let tempoInput = makeTempoInput content
         chordDisplay = makeChordDisplay model
     in flow down [chordDisplay, tempoInput]

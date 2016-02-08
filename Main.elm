@@ -11,38 +11,28 @@ import Graphics.Element exposing (Element)
 
 main : Signal Element
 main =
-    let actions = Signal.mailbox Increment
-        dropOldTime newTime (oldTime, _) = (newTime, oldTime)
+    let dropOldTime newTime (oldTime, _) = (newTime, oldTime)
         timeDelta (newTime, oldTime)     = newTime - oldTime
         timePairSignal = every millisecond
                       |> Signal.foldp dropOldTime (1454745969,0)
-        signal =
-            Signal.merge
-                (Signal.map Left actions.signal)
-                (Signal.map (timeDelta >> Right) timePairSignal)
+        clockSignal =
+                Signal.map timeDelta timePairSignal
 
-        modelSignal = Signal.map2 (,) signal bpmSignal
+        modelSignal = Signal.map2 (,) clockSignal bpmSignal
                    |> Signal.foldp update model
-    in Signal.map2 (render actions.address) modelSignal bpmMailbox.signal
+    in Signal.map2 render modelSignal bpmMailbox.signal
 
-update : (Input, Int) -> Model -> Model
-update (input, bpm) model =
-    case input of
-        Left action ->
-            case action of
-                Increment -> { model | scaleNoteIndex = scaleNoteIndexAdd model.scaleNoteIndex 1 }
-                Decrement -> { model | scaleNoteIndex = scaleNoteIndexAdd model.scaleNoteIndex -1 }
-                SetTempo newBpm  -> model
-        Right delta ->
-            let msPerBeat = 60000 // (if bpm /= 0 then bpm else 120)
-                increaseBeatNumBy = if truncate (model.timeSpentOnBeat+delta) >= msPerBeat then 1 else 0
-                isNewMeasure = (increaseBeatNumBy == 1 && model.beatNumber % 4 == 0)
-                increaseIndexBy = if (isNewMeasure) then 1 else 0
-            in
-                { model | scaleNoteIndex = scaleNoteIndexAdd model.scaleNoteIndex increaseIndexBy
-                        , timeSpentOnBeat = toFloat (truncate (model.timeSpentOnBeat+delta) % msPerBeat)
-                        , beatNumber = model.beatNumber + increaseBeatNumBy
-                }
+update : (Float, Int) -> Model -> Model
+update (timeDelta, bpm) model =
+    let msPerBeat = 60000 // (if bpm /= 0 then bpm else 120)
+        increaseBeatNumBy = if truncate (model.timeSpentOnBeat+timeDelta) >= msPerBeat then 1 else 0
+        isNewMeasure = (increaseBeatNumBy == 1 && model.beatNumber % 4 == 0)
+        increaseIndexBy = if (isNewMeasure) then 1 else 0
+    in
+        { model | scaleNoteIndex = scaleNoteIndexAdd model.scaleNoteIndex increaseIndexBy
+                , timeSpentOnBeat = toFloat (truncate (model.timeSpentOnBeat+timeDelta) % msPerBeat)
+                , beatNumber = model.beatNumber + increaseBeatNumBy
+        }
 
 scaleNoteIndexAdd : Int -> Int -> Int
 scaleNoteIndexAdd a b =
