@@ -24,13 +24,13 @@ main =
     in Signal.map2 (view actions.address) modelSignal bpmMailbox.signal
 
 update : (Input, Int) -> Model -> Model
-update (input, bpm) (index, beatDuration, beatNum) =
+update (input, bpm) (index, beatDuration, beatNum, key) =
     case input of
         Left action ->
             case action of
-                Increment -> (toneIndexAdd index 1, beatDuration, beatNum)
-                Decrement -> (toneIndexAdd index -1, beatDuration, beatNum)
-                SetTempo newBpm  -> (index, beatDuration, beatNum)
+                Increment -> (toneIndexAdd index 1, beatDuration, beatNum, key)
+                Decrement -> (toneIndexAdd index -1, beatDuration, beatNum, key)
+                SetTempo newBpm  -> (index, beatDuration, beatNum, key)
         Right delta ->
             let msPerBeat = 60000 // (if bpm /= 0 then bpm else 120)
                 increaseBeatNumBy = if truncate (beatDuration+delta) >= msPerBeat then 1 else 0
@@ -38,7 +38,8 @@ update (input, bpm) (index, beatDuration, beatNum) =
                 increaseIndexBy = if (isNewMeasure) then 1 else 0
             in ( toneIndexAdd index increaseIndexBy
                , toFloat (truncate (beatDuration+delta) % msPerBeat)
-               , beatNum + increaseBeatNumBy)
+               , beatNum + increaseBeatNumBy
+               , key)
 
 toneIndexAdd : Int -> Int -> Int
 toneIndexAdd a b =
