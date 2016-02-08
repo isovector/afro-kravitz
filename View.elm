@@ -22,21 +22,8 @@ inputHeight = 20
 render : Model -> Content -> Element
 render model content =
     let tempoInput = makeTempoInput content
-        chordDisplay = makeChordDisplay model
-    in flow down [chordDisplay, tempoInput]
-
-redText : Int -> ScaleNote -> List Element
-redText index chord =
-    let selected = get index scaleNotes
-        isSelected = Just chord == selected
-        styling = if isSelected then color red else identity
-        label = toString chord |> fromString |> styling |> centered
-    in [label, spacer 10 1]
-
-makeChordDisplay : Model -> Element
-makeChordDisplay model =
-    let scaleNoteLayout = flow right (toList (Array.map (redText model.scaleNoteIndex) scaleNotes) |> concat)
-    in [fretboard, drawChord Chords.g, toForm scaleNoteLayout] |> collage canvasWidth canvasHeight
+    in flow down [ [fretboard, drawChord Chords.g] |> collage canvasWidth canvasHeight
+                 , tempoInput]
 
 bpmMailbox : Signal.Mailbox Content
 bpmMailbox = Signal.mailbox noContent

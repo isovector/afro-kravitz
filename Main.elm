@@ -29,11 +29,6 @@ update (timeDelta, bpm) model =
         isNewMeasure = (increaseBeatNumBy == 1 && model.beatNumber % 4 == 0)
         increaseIndexBy = if (isNewMeasure) then 1 else 0
     in
-        { model | scaleNoteIndex = scaleNoteIndexAdd model.scaleNoteIndex increaseIndexBy
-                , timeSpentOnBeat = toFloat (truncate (model.timeSpentOnBeat+timeDelta) % msPerBeat)
+        { model | timeSpentOnBeat = toFloat (truncate (model.timeSpentOnBeat+timeDelta) % msPerBeat)
                 , beatNumber = model.beatNumber + increaseBeatNumBy
         }
-
-scaleNoteIndexAdd : Int -> Int -> Int
-scaleNoteIndexAdd a b =
-    (a + b) % length scaleNotes
