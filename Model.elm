@@ -7,4 +7,8 @@ import Array exposing (fromList)
 tones = fromList [I, II, III, IV, V, VI, VII]
 
 model : Model
-model = (0, 0, 120, C)
+model = { toneIndex = 0
+        , timeSpentOnBeat = 0
+        , beatNumber = 120
+        , key = C 
+        }

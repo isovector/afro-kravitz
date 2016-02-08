@@ -1,9 +1,10 @@
 module Types where
 
-type alias ToneIndex = Int
-type alias BeatDuration = Float
-type alias BeatNumber = Int
-type alias Model = (ToneIndex, BeatDuration, BeatNumber, Key)
+type alias Model = { toneIndex : Int
+                   , timeSpentOnBeat : Float
+                   , beatNumber : Int
+                   , key : Key
+                   }
 type Tone = I | II | III | IV | V | VI | VII
 type Key = A | B | C | D | E | F | G
 type alias Input = Either Action Float

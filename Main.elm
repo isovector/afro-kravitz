@@ -24,22 +24,23 @@ main =
     in Signal.map2 (view actions.address) modelSignal bpmMailbox.signal
 
 update : (Input, Int) -> Model -> Model
-update (input, bpm) (index, beatDuration, beatNum, key) =
+update (input, bpm) model =
     case input of
         Left action ->
             case action of
-                Increment -> (toneIndexAdd index 1, beatDuration, beatNum, key)
-                Decrement -> (toneIndexAdd index -1, beatDuration, beatNum, key)
-                SetTempo newBpm  -> (index, beatDuration, beatNum, key)
+                Increment -> { model | toneIndex = toneIndexAdd model.toneIndex 1 }
+                Decrement -> { model | toneIndex = toneIndexAdd model.toneIndex -1 }
+                SetTempo newBpm  -> model
         Right delta ->
             let msPerBeat = 60000 // (if bpm /= 0 then bpm else 120)
-                increaseBeatNumBy = if truncate (beatDuration+delta) >= msPerBeat then 1 else 0
-                isNewMeasure = (increaseBeatNumBy == 1 && beatNum % 4 == 0)
+                increaseBeatNumBy = if truncate (model.timeSpentOnBeat+delta) >= msPerBeat then 1 else 0
+                isNewMeasure = (increaseBeatNumBy == 1 && model.beatNumber % 4 == 0)
                 increaseIndexBy = if (isNewMeasure) then 1 else 0
-            in ( toneIndexAdd index increaseIndexBy
-               , toFloat (truncate (beatDuration+delta) % msPerBeat)
-               , beatNum + increaseBeatNumBy
-               , key)
+            in 
+                { model | toneIndex = toneIndexAdd model.toneIndex increaseIndexBy
+                        , timeSpentOnBeat = toFloat (truncate (model.timeSpentOnBeat+delta) % msPerBeat)
+                        , beatNumber = model.beatNumber + increaseBeatNumBy
+                }
 
 toneIndexAdd : Int -> Int -> Int
 toneIndexAdd a b =
