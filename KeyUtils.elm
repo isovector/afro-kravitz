@@ -6,7 +6,7 @@ import Types exposing (..)
 import Utils exposing (..)
 
 keys  = [A, B, C, D, E, F, G]
-tones = [I, II, III, IV, V, VI, VII]
+scaleNotes = [I, II, III, IV, V, VI, VII]
 
 genEnumFuncs : List a -> (a -> Int, Int -> a)
 genEnumFuncs es =
@@ -16,6 +16,6 @@ genEnumFuncs es =
             Nothing -> Debug.crash "uhh that don't exist"
     in (f fst snd, f snd fst)
 
-(keyToInt, intToKey)   = genEnumFuncs keys
-(toneToInt, intToTone) = genEnumFuncs tones
+(keyToInt, intToKey) = genEnumFuncs keys
+(scaleNoteToInt, intToScaleNote) = genEnumFuncs scaleNotes
 

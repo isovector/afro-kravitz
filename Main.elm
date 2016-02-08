@@ -30,8 +30,8 @@ update (input, bpm) model =
     case input of
         Left action ->
             case action of
-                Increment -> { model | toneIndex = toneIndexAdd model.toneIndex 1 }
-                Decrement -> { model | toneIndex = toneIndexAdd model.toneIndex -1 }
+                Increment -> { model | scaleNoteIndex = scaleNoteIndexAdd model.scaleNoteIndex 1 }
+                Decrement -> { model | scaleNoteIndex = scaleNoteIndexAdd model.scaleNoteIndex -1 }
                 SetTempo newBpm  -> model
         Right delta ->
             let msPerBeat = 60000 // (if bpm /= 0 then bpm else 120)
@@ -39,11 +39,11 @@ update (input, bpm) model =
                 isNewMeasure = (increaseBeatNumBy == 1 && model.beatNumber % 4 == 0)
                 increaseIndexBy = if (isNewMeasure) then 1 else 0
             in
-                { model | toneIndex = toneIndexAdd model.toneIndex increaseIndexBy
+                { model | scaleNoteIndex = scaleNoteIndexAdd model.scaleNoteIndex increaseIndexBy
                         , timeSpentOnBeat = toFloat (truncate (model.timeSpentOnBeat+delta) % msPerBeat)
                         , beatNumber = model.beatNumber + increaseBeatNumBy
                 }
 
-toneIndexAdd : Int -> Int -> Int
-toneIndexAdd a b =
-    (a + b) % length tones
+scaleNoteIndexAdd : Int -> Int -> Int
+scaleNoteIndexAdd a b =
+    (a + b) % length scaleNotes

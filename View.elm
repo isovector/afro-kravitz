@@ -23,10 +23,10 @@ render address model content =
     let tempoInput = makeTempoInput content
         chordDisplay = makeChordDisplay model
     in flow down [chordDisplay, tempoInput]
-    
-redText : Int -> Tone -> List Element
+
+redText : Int -> ScaleNote -> List Element
 redText index chord =
-    let selected = get index tones
+    let selected = get index scaleNotes
         isSelected = Just chord == selected
         styling = if isSelected then color red else identity
         label = toString chord |> fromString |> styling |> centered
@@ -34,8 +34,8 @@ redText index chord =
 
 makeChordDisplay : Model -> Element
 makeChordDisplay model =
-    let toneLayout = flow right (toList (Array.map (\tone -> redText model.toneIndex tone) tones) |> concat)
-    in [fretboard, drawChord cChord, toForm toneLayout] |> collage canvasWidth canvasHeight
+    let scaleNoteLayout = flow right (toList (Array.map (\scaleNote -> redText model.scaleNoteIndex scaleNote) scaleNotes) |> concat)
+    in [fretboard, drawChord cChord, toForm scaleNoteLayout] |> collage canvasWidth canvasHeight
 
 bpmMailbox : Signal.Mailbox Content
 bpmMailbox = Signal.mailbox noContent

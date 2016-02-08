@@ -1,11 +1,11 @@
 module Types where
 
-type alias Model = { toneIndex : Int
+type alias Model = { scaleNoteIndex : Int
                    , timeSpentOnBeat : Float
                    , beatNumber : Int
                    , key : Key
                    }
-type Tone = I | II | III | IV | V | VI | VII
+type ScaleNote = I | II | III | IV | V | VI | VII
 type Key = A | B | C | D | E | F | G
 type alias Input = Either Action Float
 type Either a b  = Left a | Right b
