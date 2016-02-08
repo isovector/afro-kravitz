@@ -6,8 +6,9 @@ import Model exposing (..)
 
 import Time exposing (..)
 import Array exposing (length)
+import Graphics.Element exposing (Element)
 
--- main : Signal Html.Html
+main : Signal Element
 main =
     let actions = Signal.mailbox Increment
         dropOldTime newTime (oldTime, _) = (newTime, oldTime)
