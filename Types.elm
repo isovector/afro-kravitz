@@ -17,14 +17,7 @@ type Fingering = Finger Int Fret GString
                | Barre Int Fret GString GString
 type alias Chord = List Fingering
 
-type Note =      C | C'
-          | Db | D | D'
-          | Eb | E | E'
-          | Fb | F | F'
-          | Gb | G | G'
-          | Ab | A | A'
-          | Bb | B | B'
-          | Cb
+type Note = C | C' | D | D' | E | F | F' | G | G' | A | A' | B
 
 type alias Semitone = Int
 type alias ScaleTemplate = Array Semitone -- length 7
