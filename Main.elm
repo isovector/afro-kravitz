@@ -3,6 +3,7 @@ module Main where
 import Types exposing (..)
 import View exposing (..)
 import Model exposing (..)
+import KeyUtils exposing (..)
 
 import Time exposing (..)
 import Array exposing (length)
@@ -37,7 +38,7 @@ update (input, bpm) model =
                 increaseBeatNumBy = if truncate (model.timeSpentOnBeat+delta) >= msPerBeat then 1 else 0
                 isNewMeasure = (increaseBeatNumBy == 1 && model.beatNumber % 4 == 0)
                 increaseIndexBy = if (isNewMeasure) then 1 else 0
-            in 
+            in
                 { model | toneIndex = toneIndexAdd model.toneIndex increaseIndexBy
                         , timeSpentOnBeat = toFloat (truncate (model.timeSpentOnBeat+delta) % msPerBeat)
                         , beatNumber = model.beatNumber + increaseBeatNumBy
