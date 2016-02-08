@@ -18,18 +18,30 @@ canvasHeight = 200
 
 inputHeight = 20
 
-view : Signal.Address Action -> Model -> Content -> Element
-view address model content = (view2 address model) (showUi content)
+render : Signal.Address Action -> Model -> Content -> Element
+render address model content =
+    let tempoInput = makeTempoInput content
+        chordDisplay = makeChordDisplay model
+    in flow down [chordDisplay, tempoInput]
+    
+redText : Int -> Tone -> List Element
+redText index chord =
+    let selected = get index tones
+        isSelected = Just chord == selected
+        styling = if isSelected then color red else identity
+        label = toString chord |> fromString |> styling |> centered
+    in [label, spacer 10 1]
 
-view2 : Signal.Address Action -> Model -> Element -> Element
-view2 address model bpmInput =
-    flow down [viewChords model, bpmInput]
+makeChordDisplay : Model -> Element
+makeChordDisplay model =
+    let toneLayout = flow right (toList (Array.map (\tone -> redText model.toneIndex tone) tones) |> concat)
+    in [fretboard, drawChord cChord, toForm toneLayout] |> collage canvasWidth canvasHeight
 
 bpmMailbox : Signal.Mailbox Content
 bpmMailbox = Signal.mailbox noContent
 
-showUi : Content -> Element
-showUi content  =
+makeTempoInput : Content -> Element
+makeTempoInput content  =
     let inputField = field defaultStyle (Signal.message bpmMailbox.address) "BPM" content
         label = Text.height inputHeight (fromString "Tempo: ") |> rightAligned
         layout = flow left (map (height inputHeight) [inputField, label])
@@ -41,16 +53,3 @@ bpmSignal = let onBpmChange s = (case parseInt s.string of
                 Err _     -> 1
             )
             in Signal.map onBpmChange bpmMailbox.signal
-
-redText : Int -> Tone -> List Element
-redText index chord =
-    let selected = get index tones
-        isSelected = Just chord == selected
-        styling = if isSelected then color red else identity
-        label = toString chord |> fromString |> styling |> centered
-    in [label, spacer 10 1]
-
-viewChords : Model -> Element
-viewChords model =
-    let toneLayout = flow right (toList (Array.map (\tone -> redText model.toneIndex tone) tones) |> concat)
-    in [fretboard, drawChord cChord, toForm toneLayout] |> collage canvasWidth canvasHeight

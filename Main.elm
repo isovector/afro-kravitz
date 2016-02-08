@@ -22,7 +22,7 @@ main =
 
         modelSignal = Signal.map2 (,) signal bpmSignal
                    |> Signal.foldp update model
-    in Signal.map2 (view actions.address) modelSignal bpmMailbox.signal
+    in Signal.map2 (render actions.address) modelSignal bpmMailbox.signal
 
 update : (Input, Int) -> Model -> Model
 update (input, bpm) model =
