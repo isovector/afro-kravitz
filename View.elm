@@ -3,6 +3,7 @@ module View where
 import Types exposing (..)
 import Model exposing (..)
 import ChordDrawing exposing (..)
+import Chords
 
 import Graphics.Element exposing (Element (..), height, left, beside, midBottom, rightAligned, show, flow, right, down, centered, spacer, container, middle)
 import Graphics.Collage exposing (Form (..), collage, toForm, text, group)
@@ -34,8 +35,8 @@ redText index chord =
 
 makeChordDisplay : Model -> Element
 makeChordDisplay model =
-    let scaleNoteLayout = flow right (toList (Array.map (\scaleNote -> redText model.scaleNoteIndex scaleNote) scaleNotes) |> concat)
-    in [fretboard, drawChord cChord, toForm scaleNoteLayout] |> collage canvasWidth canvasHeight
+    let scaleNoteLayout = flow right (toList (Array.map (redText model.scaleNoteIndex) scaleNotes) |> concat)
+    in [fretboard, drawChord Chords.g, toForm scaleNoteLayout] |> collage canvasWidth canvasHeight
 
 bpmMailbox : Signal.Mailbox Content
 bpmMailbox = Signal.mailbox noContent

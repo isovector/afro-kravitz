@@ -1,7 +1,6 @@
 module ChordDrawing
     ( fretboard
     , drawChord
-    , cChord
     ) where
 
 import Types exposing (..)
@@ -78,11 +77,4 @@ fretboard =
        ] ++ List.map makeFret [0..4]
          ++ List.map makeString [1..6]
          |> group
-
-cChord : Chord
-cChord = [ Barre 1 2 5 1
-         , Finger 2 3 2
-         , Finger 3 4 3
-         , Finger 4 4 4
-         ]
 
