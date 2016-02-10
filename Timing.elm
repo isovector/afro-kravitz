@@ -5,6 +5,13 @@ import Graphics.Input.Field exposing (Content, noContent)
 import Time exposing (..)
 import ParseInt exposing (parseInt)
 
+clockSignal : Signal Float
+clockSignal =
+    let dropOldTime newTime (oldTime, _) = (newTime, oldTime)
+        timeDelta (newTime, oldTime)     = newTime - oldTime
+        timePairSignal = every millisecond |> Signal.foldp dropOldTime (1454745969,0)
+    in Signal.map timeDelta timePairSignal
+
 bpmMailbox : Signal.Mailbox Content
 bpmMailbox = Signal.mailbox noContent
 
