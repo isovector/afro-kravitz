@@ -9,12 +9,12 @@ import Utils exposing (..)
 
 semitonesAbove : Note -> Semitone -> Note
 semitonesAbove n s = noteOrd.fromInt
-                  <| (noteOrd.toInt n + s) % List.length notes
+                  <| (noteOrd.toInt n + s) % noteEnum.count
 
 scaleNote : Scale -> Int -> Note
 scaleNote (tonic, template) i = semitonesAbove tonic
                              << unsafeGet template
-                             <| i % List.length notes
+                             <| i % noteEnum.count
 
 -- TODO(sandy): this might not make a huge amount of sense as it's
 -- parameterized

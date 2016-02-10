@@ -6,11 +6,17 @@ module Typeclasses where
 
 import Utils exposing (..)
 
-type alias Ord a = { toInt : a -> Int, fromInt : Int -> a }
+type alias Enum a = { elems : List a, count : Int }
+derivingEnum : List a -> Enum a
+derivingEnum elems = { elems = elems
+                     , count = List.length elems }
 
-derivingOrd : List a -> Ord a
-derivingOrd c = let (toInt, fromInt) = genEnumFuncs c
-                in { toInt = toInt, fromInt = fromInt }
+
+type alias Ord a = { toInt : a -> Int, fromInt : Int -> a }
+derivingOrd : Enum a -> Ord a
+derivingOrd enum =
+    let (toInt, fromInt) = genEnumFuncs enum.elems
+    in { toInt = toInt, fromInt = fromInt }
 
 liftOrd : Ord a -> Ord b -> Ord (a, b)
 liftOrd ordA ordB =
