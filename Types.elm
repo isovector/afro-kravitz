@@ -1,6 +1,7 @@
 module Types where
 
 import Array exposing (Array)
+import Typeclasses
 
 type alias Model = { scaleNoteIndex : Int
                    , timeSpentOnBeat : Float
@@ -18,6 +19,8 @@ type Fingering = Finger Int Fret GString
 type alias Chord = List Fingering
 
 type Note = C | C' | D | D' | E | F | F' | G | G' | A | A' | B
+notes = [C, C', D, D', E, F, F', G, G', A, A', B]
+noteOrd = Typeclasses.derivingOrd notes
 
 type alias Semitone = Int
 type alias ScaleTemplate = Array Semitone -- length 7

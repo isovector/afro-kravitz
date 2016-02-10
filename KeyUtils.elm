@@ -7,12 +7,9 @@ module KeyUtils
 import Types exposing (..)
 import Utils exposing (..)
 
-notes = [C, C', D, D', E, F, F', G, G', A, A', B]
-
-(noteToInt, intToNote) = genEnumFuncs notes
-
 semitonesAbove : Note -> Semitone -> Note
-semitonesAbove n s = intToNote <| (noteToInt n + s) % List.length notes
+semitonesAbove n s = noteOrd.fromInt
+                  <| (noteOrd.toInt n + s) % List.length notes
 
 scaleNote : Scale -> Int -> Note
 scaleNote (tonic, template) i = semitonesAbove tonic
