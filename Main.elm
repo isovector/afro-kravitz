@@ -1,12 +1,15 @@
 module Main where
 
 import Graphics.Element exposing (Element, show)
-import ChordViewer
 
-type Page = ChordViewer | About
+import Types exposing (..)
+import ChordViewer
+import Chords
+
+type Page = About | ChordViewer Chord
 
 pageSignal : Signal Page
-pageSignal = Signal.constant ChordViewer
+pageSignal = Signal.constant <| ChordViewer Chords.bm
 
 main: Signal Element
 main = 
@@ -15,7 +18,7 @@ main =
 router : Page -> Element
 router page = 
     case page of
-        ChordViewer -> ChordViewer.view
+        ChordViewer chord-> ChordViewer.view chord
         About -> show "Ariel and Sandy are ridiculously sexy beasts. haha hahaa" -- About.view
 
 viewNavbar : Element -> Element

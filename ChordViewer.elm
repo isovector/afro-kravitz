@@ -10,7 +10,7 @@ import Graphics.Collage exposing (collage)
 chordSignal : Signal Chord
 chordSignal = Signal.constant Chords.a
 
-view : Element
-view =
-    [drawChord Chords.a] |> collage 800 200
+view : Chord -> Element
+view chord =
+    [drawChord chord] |> collage 800 200
 
