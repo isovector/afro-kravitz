@@ -1,6 +1,22 @@
 module Chords where
 
+import Typeclasses
 import Types exposing (..)
+import TypedDict exposing (..)
+
+
+knownChords : Map (Note, Quality) Chord
+knownChords = fromList (Typeclasses.liftOrd noteOrd qualityOrd)
+    [ ((A, Maj), a)
+    , ((A, Min), am)
+    , ((B, Min), bm)
+    , ((C, Maj), c)
+    , ((D, Maj), d)
+    , ((D, Min), dm)
+    , ((E, Maj), e)
+    , ((E, Min), em)
+    , ((G, Maj), g)
+    ]
 
 a : Chord
 a = [ Finger 1 2 3

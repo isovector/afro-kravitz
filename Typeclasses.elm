@@ -18,6 +18,8 @@ derivingOrd enum =
     let (toInt, fromInt) = genEnumFuncs enum.elems
     in { toInt = toInt, fromInt = fromInt }
 
+-- TODO(sandy): Don't depend on this too hard, it's pretty easy to
+-- get non-unique ords when composing.
 liftOrd : Ord a -> Ord b -> Ord (a, b)
 liftOrd ordA ordB =
     { toInt = \(a, b) -> ordA.toInt a * 100 + ordB.toInt b

@@ -18,6 +18,10 @@ type Fingering = Finger Int Fret GString
                | Barre Int Fret GString GString
 type alias Chord = List Fingering
 
+type Quality = Maj | Min
+qualityEnum = Typeclasses.derivingEnum [Maj, Min]
+qualityOrd  = Typeclasses.derivingOrd qualityEnum
+
 type Note = C | C' | D | D' | E | F | F' | G | G' | A | A' | B
 noteEnum = Typeclasses.derivingEnum [C, C', D, D', E, F, F', G, G', A, A', B]
 noteOrd  = Typeclasses.derivingOrd noteEnum
