@@ -10,7 +10,7 @@ type Page = About | ChordLibraryPage Chord
 
 pageBox : Signal.Mailbox Page
 pageBox =
-    Signal.mailbox About
+    Signal.mailbox (ChordLibraryPage Chords.a)
 
 embedPageTemplate : Element -> Element
 embedPageTemplate pageTemplate =
