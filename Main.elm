@@ -13,10 +13,14 @@ pageBox : Signal.Mailbox Page
 pageBox =
     Signal.mailbox About
 
+appModel : Signal Page
+appModel = 
+    pageBox.signal
+
 main: Signal Element
 main = 
     let renderApp = embedPageTemplate << router
-    in Signal.map renderApp pageBox.signal
+    in Signal.map renderApp appModel
 
 router : Page -> Element
 router page = 
