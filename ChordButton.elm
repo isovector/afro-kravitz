@@ -7,7 +7,7 @@ import Chords
 import Graphics.Input exposing(..)
 import Graphics.Element exposing (..)
 
-type alias Model = ((Note, Quality), Chord)
+type alias Model = ((Note, Quality), ChordChart)
 init : Model
 init = 
     ((B, Min), Chords.bm)

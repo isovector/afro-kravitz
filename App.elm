@@ -6,7 +6,7 @@ import Graphics.Input exposing (..)
 import Types exposing(..)
 import Chords
 
-type Page = About | ChordLibraryPage Chord
+type Page = About | ChordLibraryPage ChordChart
 
 pageBox : Signal.Mailbox Page
 pageBox =
