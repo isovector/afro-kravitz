@@ -1,4 +1,4 @@
-module ChordLibraryPage (view) where 
+module ChordLibraryPage (view) where
 
 import Types exposing (..)
 import ChordDrawing exposing (drawChord)

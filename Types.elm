@@ -8,6 +8,14 @@ type alias Model = { scaleNoteIndex : Int
                    , beatNumber : Int
                    }
 
+type alias WorldModel =
+    { semiquaver : Int
+    , quaver     : Int
+    , crotchet   : Int
+    , minim      : Int
+    , semibreve  : Int
+    }
+
 type alias Input = Either Action Float
 type Either a b  = Left a | Right b
 type Action = Increment | Decrement | SetTempo Int
@@ -30,3 +38,4 @@ type alias Semitone = Int
 type alias ScaleTemplate = Array Semitone -- length 7
 type alias Scale = (Note, ScaleTemplate)
 type alias ChordProgression = List ((Int, ScaleTemplate))
+

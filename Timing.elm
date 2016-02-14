@@ -5,6 +5,15 @@ import Graphics.Input.Field exposing (Content, noContent)
 import Time exposing (..)
 import ParseInt exposing (parseInt)
 
+type alias Timing a =
+    { a
+    | semiquaver : Int
+    , quaver     : Int
+    , crotchet   : Int
+    , minim      : Int
+    , semibreve  : Int
+    }
+
 clockSignal : Signal Float
 clockSignal =
     let dropOldTime newTime (oldTime, _) = (newTime, oldTime)
@@ -31,19 +40,35 @@ foldEvery2 : Int -> Signal Int -> Signal Int
 foldEvery2 max = flip foldp 0 (\i -> flip (%) max << (+) (1 - i % 2))
               << dropRepeats
 
-semiquaver : Signal Int
-semiquaver = foldp (always <| (+) 1 >> flip (%) 16) 0
-          << every <| toFloat sqps
+semiquaverSignal : Signal Int
+semiquaverSignal = foldp (always <| (+) 1 >> flip (%) 16) 0
+                << every <| toFloat sqps
 
-quaver : Signal Int
-quaver = foldEvery2 8 semiquaver
+quaverSignal : Signal Int
+quaverSignal = foldEvery2 8 semiquaverSignal
 
-crotchet : Signal Int
-crotchet = foldEvery2 4 quaver
+crotchetSignal : Signal Int
+crotchetSignal = foldEvery2 4 quaverSignal
 
-minim: Signal Int
-minim = foldEvery2 2 crotchet
+minimSignal: Signal Int
+minimSignal = foldEvery2 2 crotchetSignal
 
-semibreve : Signal Int
-semibreve = foldEvery2 1 minim
+semibreveSignal : Signal Int
+semibreveSignal = foldEvery2 16 minimSignal
+
+timingSignal : Signal (Timing {})
+timingSignal =
+    let f a b c d e =
+        { semiquaver = a
+        , quaver     = b
+        , crotchet   = c
+        , minim      = d
+        , semibreve  = e
+        }
+    in Signal.map5 f
+           semiquaverSignal
+           quaverSignal
+           crotchetSignal
+           minimSignal
+           semibreveSignal
 
