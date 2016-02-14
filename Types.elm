@@ -19,15 +19,12 @@ type alias Viewport a =
     , height : Int
     }
 
-type alias Input = Either Action Float
-type Either a b  = Left a | Right b
-type Action = Increment | Decrement | SetTempo Int
 type alias GString = Int
 
 type alias Fret = Int
 type Fingering = Finger Int Fret GString
                | Barre Int Fret GString GString
-type alias Chord = List Fingering
+type alias ChordChart = List Fingering
 
 type Quality = Maj | Min
 qualityEnum = Typeclasses.derivingEnum [Maj, Min]

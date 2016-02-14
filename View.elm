@@ -20,7 +20,7 @@ inputHeight = 20
 
 render model chord content =
     let tempoInput = makeTempoInput content
-    in flow down [ (fretboard :: List.map drawChord chord) |> collage canvasWidth canvasHeight
+    in flow down [ (fretboard :: List.map drawChordChart chord) |> collage canvasWidth canvasHeight
                  , tempoInput]
 
 makeTempoInput : Content -> Element

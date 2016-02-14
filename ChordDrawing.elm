@@ -1,6 +1,6 @@
 module ChordDrawing
     ( fretboard
-    , drawChord
+    , drawChordChart
     ) where
 
 import Types exposing (..)
@@ -60,8 +60,8 @@ drawFingering fingering = case fingering of
     Finger finger fret string -> drawFinger finger fret string
     Barre  finger fret str1 str2 -> drawBarre finger fret str1 str2
 
-drawChord : Chord -> Form
-drawChord c = List.map drawFingering c |> group
+drawChordChart : ChordChart -> Form
+drawChordChart c = List.map drawFingering c |> group
 
 fretboard : Form
 fretboard =
