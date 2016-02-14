@@ -3,11 +3,6 @@ module Types where
 import Array exposing (Array)
 import Typeclasses
 
-type alias Model = { scaleNoteIndex : Int
-                   , timeSpentOnBeat : Float
-                   , beatNumber : Int
-                   }
-
 type alias WorldModel =
     { semiquaver : Int
     , quaver     : Int
