@@ -16,8 +16,9 @@ chordList = toList Chords.knownChords
 
 view : Chord -> Viewport a -> Signal.Address App.Page -> Element
 view chord viewport address =
-    let chordButtons = flow right (map (ChordButton.view address) chordList)
-        activeChordView = collage viewport.width 100 [fretboard, drawChord chord]
-        layout = flow down [activeChordView, chordButtons]
-    in [toForm layout] |> collage viewport.width 200
+    let chordButtonViews = flow right (map (ChordButton.view address) chordList)
+        chordButtonListView = container viewport.width 200 middle chordButtonViews
+        activeChordView = collage viewport.width 200 [fretboard, drawChord chord]
+        layout = flow down [activeChordView, chordButtonListView]
+    in [toForm layout] |> collage viewport.width viewport.height
 
