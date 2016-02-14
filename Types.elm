@@ -9,6 +9,14 @@ type alias WorldModel =
     , crotchet   : Int
     , minim      : Int
     , semibreve  : Int
+    , width      : Int
+    , height     : Int
+    }
+
+type alias Viewport a =
+    { a
+    | width  : Int
+    , height : Int
     }
 
 type alias Input = Either Action Float
