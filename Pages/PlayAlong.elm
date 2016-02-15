@@ -5,8 +5,10 @@ import Types exposing (..)
 import ChordDrawing exposing (drawChordChart, fretboard)
 import Graphics.Element exposing (..)
 import Timing exposing (..)
+import KeyUtils exposing (nameOfRelativeChord)
 
 import Graphics.Collage exposing (Form (..), collage, toForm, text, filled, moveX, moveY, rect, circle, group, solid, outlined)
+import Text
 import Color exposing (grey, black, white, green, red)
 
 barWidth = 150
@@ -14,6 +16,8 @@ barHeight = 100
 
 barsNumX = 4
 barsNumY = 2
+
+barsList = [0 .. barsNumX * barsNumY - 1]
 
 semiquaverOffset : Int -> Float
 semiquaverOffset sq = toFloat sq * barWidth / 16 - barWidth / 32
@@ -29,15 +33,25 @@ bars =
        , rhythmDots
        ] |> group
 
+chordNames : ChordProgression -> Form
+chordNames =
+    let f mm nq = uncurry nameOfRelativeChord nq
+               |> Text.fromString
+               |> text
+               |> moveToTime mm 8
+               |> moveY (barHeight / 8)
+    in group << List.map2 f barsList
+
 rhythmDots : Form
 rhythmDots =
     let dot mm sq = circle 3
                  |> outlined (solid black)
-                 |> moveToTime mm (sq - 1)
+                 |> moveToTime mm (sq + 2)
+                 |> moveY (toFloat <| -barHeight // 4)
     in group
           << List.concat
-          << flip   List.map          [0 .. barsNumX * barsNumY - 1]
-          <| \mm -> List.map (dot mm) [4, 8, 12, 16]
+          << flip   List.map          barsList
+          <| \mm -> List.map (dot mm) [0, 4, 8, 12]
 
 
 
@@ -57,5 +71,5 @@ scrubber time = rect 2 barHeight
 
 view : Viewport -> Timing -> Note -> ChordProgression -> Element
 view viewport time note prog =
-    collage 600 200 [ scrubber time, bars ]
+    collage 600 200 [ scrubber time, bars, chordNames prog ]
 
