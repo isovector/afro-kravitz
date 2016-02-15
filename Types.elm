@@ -3,6 +3,8 @@ module Types where
 import Array exposing (Array)
 import Typeclasses
 
+type alias Viewport = (Int, Int)
+
 type alias GString = Int
 
 type alias Fret = Int
