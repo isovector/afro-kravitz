@@ -23,5 +23,5 @@ noteOrd  = Typeclasses.derivingOrd noteEnum
 type alias Semitone = Int
 type alias ScaleTemplate = Array Semitone -- length 7
 type alias Scale = (Note, ScaleTemplate)
-type alias ChordProgression = List ((Int, Quality))
+type alias ChordProgression = Array ((Int, Quality))
 

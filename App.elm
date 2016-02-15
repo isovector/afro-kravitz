@@ -14,7 +14,7 @@ type Page = About
 
 pageBox : Signal.Mailbox Page
 pageBox =
-    Signal.mailbox (PlayAlong A chordProgression)
+    Signal.mailbox (PlayAlong C chordProgression)
 
 pageSignal : Signal (Time, Page)
 pageSignal = timestamp pageBox.signal
@@ -23,5 +23,5 @@ embedPageTemplate : Element -> Element
 embedPageTemplate pageTemplate =
     let pageChangeBtn = flip button "Push it baby"
                      << Signal.message pageBox.address
-                     <| PlayAlong A chordProgression
+                     <| PlayAlong G chordProgression
     in flow down [pageTemplate, pageChangeBtn]

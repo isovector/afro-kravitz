@@ -13,12 +13,13 @@ harMin : ScaleTemplate
 harMin = buildTemplate [0, 2, 1, 2, 2, 1, 2, 1]
 
 chordProgression : ChordProgression
-chordProgression = [ (1, Maj)
-                   , (6, Min)
-                   , (4, Maj)
-                   , (5, Maj)
-                   , (1, Maj)
-                   ]
+chordProgression = fromList
+    [ (1, Maj)
+    , (6, Min)
+    , (4, Maj)
+    , (5, Maj)
+    , (1, Maj)
+    ]
 
 getScaleTemplate : Quality -> ScaleTemplate
 getScaleTemplate q =
