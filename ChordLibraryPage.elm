@@ -14,11 +14,12 @@ import List exposing (map)
 chordList : List ChordButton.Model
 chordList = toList Chords.knownChords
 
-view : ChordChart -> Viewport a -> Signal.Address App.Page -> Element
-view chord viewport address =
-    let chordButtonViews = flow right (map (ChordButton.view address) chordList)
-        chordButtonListView = container viewport.width 200 middle chordButtonViews
-        activeChordView = collage viewport.width 200 [fretboard, drawChordChart chord]
+view : Viewport -> ChordChart -> Signal.Address App.Page -> Element
+view viewport chord address =
+    let width = fst viewport
+        chordButtonViews = flow right (map (ChordButton.view address) chordList)
+        chordButtonListView = container width 200 middle chordButtonViews
+        activeChordView = collage width 200 [fretboard, drawChordChart chord]
         layout = flow down [activeChordView, chordButtonListView]
-    in [toForm layout] |> collage viewport.width viewport.height
+    in [toForm layout] |> uncurry collage viewport
 
