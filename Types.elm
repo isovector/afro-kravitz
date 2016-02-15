@@ -3,22 +3,6 @@ module Types where
 import Array exposing (Array)
 import Typeclasses
 
-type alias WorldModel =
-    { semiquaver : Int
-    , quaver     : Int
-    , crotchet   : Int
-    , minim      : Int
-    , semibreve  : Int
-    , width      : Int
-    , height     : Int
-    }
-
-type alias Viewport a =
-    { a
-    | width  : Int
-    , height : Int
-    }
-
 type alias GString = Int
 
 type alias Fret = Int
