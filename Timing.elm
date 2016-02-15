@@ -18,8 +18,8 @@ now = every millisecond
 
 computeTiming : Int -> Time -> Time -> Timing
 computeTiming bpm start now =
-    let sqps = 15000 // bpm
-        dt   = round <| now - start
+    let sqps = 15000 / toFloat bpm
+        dt   = round <| (now - start) / sqps
 
         sq =  dt       % 16
         q  = (dt // 2) % 8
