@@ -53,27 +53,27 @@ bars =
 
 chordNames : ChordProgression -> Form
 chordNames =
-    let f mm nq = uncurry nameOfRelativeChord nq
-               |> fromString
-               |> text
-               |> moveToTime mm 8
-               |> moveY (barHeight / 8)
+    let f meas nq = uncurry nameOfRelativeChord nq
+                 |> fromString
+                 |> text
+                 |> moveToTime meas 8
+                 |> moveY (barHeight / 8)
     in group << List.map2 f barsList << Array.toList
 
 rhythmDots : Form
 rhythmDots =
-    let dot mm sq = circle 3
+    let dot meas sq = circle 3
                  |> outlined (solid black)
-                 |> moveToTime mm (sq + 2)
+                 |> moveToTime meas (sq + 2)
                  |> moveY (toFloat <| -barHeight // 4)
     in group
           << List.concat
-          << flip   List.map          barsList
-          <| \mm -> List.map (dot mm) [0, 4, 8, 12]
+          << flip     List.map            barsList
+          <| \meas -> List.map (dot meas) [0, 4, 8, 12]
 
 chordToPlay : Note -> ChordProgression -> Int -> Form
-chordToPlay tonic prog mm =
-    let idx = mm % (barsNumX * barsNumY)
+chordToPlay tonic prog meas =
+    let idx = meas % (barsNumX * barsNumY)
         (num, qual) = case Array.get idx prog of
             Just x -> x
             Nothing -> (0, Maj)
@@ -86,11 +86,12 @@ chordToPlay tonic prog mm =
     in drawChordChart chart
 
 moveToTime : Int -> Int -> Form -> Form
-moveToTime mm sq = moveX (-barWidth * barsNumX / 2)
-                >> moveY (barHeight / 2)
-                >> moveX (semiquaverOffset sq)
-                >> moveX (toFloat <| mm % barsNumX * barWidth)
-                >> moveY (toFloat <| (mm // barsNumX) % barsNumY * -barHeight)
+moveToTime meas sq = moveX (-barWidth * barsNumX / 2)
+                  >> moveY (barHeight / 2)
+                  >> moveX (semiquaverOffset sq)
+                  >> moveX (toFloat <| meas % barsNumX * barWidth)
+                  >> moveY
+                    (toFloat <| (meas // barsNumX) % barsNumY * -barHeight)
 
 scrubber : Timing -> Form
 scrubber time = rect 2 barHeight
