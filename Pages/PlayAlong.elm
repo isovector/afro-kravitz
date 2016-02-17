@@ -1,21 +1,33 @@
 module Pages.PlayAlong where
 
-import Array
-import Debug
-import List
-import Types exposing (..)
-import Chords
+import App exposing (pageBox)
 import ChordDrawing exposing (drawChordChart, fretboard)
-import Graphics.Element exposing (..)
-import Timing exposing (..)
+import Chords
+import Components.KeySelector exposing (keySelector)
 import KeyUtils exposing (nameOfRelativeChord, scaleNote)
 import ScaleTemplates exposing (getScaleTemplate)
-import TypedDict
-import Utils exposing (..)
+import Timing exposing (Timing)
+import TypedDict exposing (get)
+import Types exposing (..)
 
-import Graphics.Collage exposing (Form (..), collage, toForm, text, filled, moveX, moveY, rect, circle, group, solid, outlined)
-import Text
+import Array
 import Color exposing (grey, black, white, green, red)
+import Graphics.Collage exposing
+    ( Form (..)
+    , circle
+    , collage
+    , filled
+    , group
+    , moveX
+    , moveY
+    , outlined
+    , rect
+    , solid
+    , text
+    , toForm
+    )
+import Graphics.Element exposing (Element, flow, down)
+import Text exposing (fromString)
 
 barWidth = 150
 barHeight = 100
@@ -42,7 +54,7 @@ bars =
 chordNames : ChordProgression -> Form
 chordNames =
     let f mm nq = uncurry nameOfRelativeChord nq
-               |> Text.fromString
+               |> fromString
                |> text
                |> moveToTime mm 8
                |> moveY (barHeight / 8)
@@ -65,15 +77,12 @@ chordToPlay tonic prog mm =
         (num, qual) = case Array.get idx prog of
             Just x -> x
             Nothing -> (0, Maj)
-        -- TODO(sandy): I'm not convinced this is the
-        -- right expression to get the template
         template = getScaleTemplate Maj
         root = curry scaleNote tonic template num
         chord = (root, qual)
-        chart =
-            case TypedDict.get chord Chords.knownChords of
-                Just x  -> x
-                Nothing -> []
+        chart = case get chord Chords.knownChords of
+            Just x  -> x
+            Nothing -> []
     in drawChordChart chart
 
 moveToTime : Int -> Int -> Form -> Form
@@ -88,18 +97,19 @@ scrubber time = rect 2 barHeight
              |> filled red
              |> moveToTime time.measure time.semiquaver
 
-
-
 view : Viewport -> Timing -> Note -> ChordProgression -> Element
 view viewport time tonic prog =
-    collage (fst viewport) 200
-        [ scrubber time
-        , bars
-        , chordNames prog
-        , group [ fretboard
-                , chordToPlay tonic prog time.measure
-                ]
-            |> moveX (barsNumX / 2 * barWidth)
-            |> moveX 100
+    flow down
+        [ collage (fst viewport) 200
+            [ scrubber time
+            , bars
+            , chordNames prog
+            , group [ fretboard
+                    , chordToPlay tonic prog time.measure
+                    ]
+                |> moveX (barsNumX / 2 * barWidth)
+                |> moveX 100
+            ]
+        , keySelector (flip App.PlayAlong prog) pageBox.address
         ]
 
