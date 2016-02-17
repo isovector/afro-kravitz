@@ -1,8 +1,8 @@
 module Pages.PlayAlong where
 
 import App exposing (pageBox)
-import Components.ChordChart exposing (chordChart)
 import Chords
+import Components.ChordChart exposing (chordChart)
 import Components.KeySelector exposing (keySelector)
 import KeyUtils exposing (nameOfRelativeChord, scaleNote)
 import ScaleTemplates exposing (getScaleTemplate)

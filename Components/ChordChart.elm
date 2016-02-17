@@ -1,12 +1,12 @@
 module Components.ChordChart (chordChart) where
 
 import Types exposing (..)
-
-import Graphics.Element exposing (Element)
-import Graphics.Collage exposing (Form (..), collage, toForm, text, filled, moveX, moveY, rect, circle, group)
-import Color exposing (grey, black, white, green)
-import Text exposing (Text (..), fromString, color)
 import Utils exposing (return)
+
+import Color exposing (grey, black, white, green)
+import Graphics.Collage exposing (Form (..), collage, toForm, text, filled, moveX, moveY, rect, circle, group)
+import Graphics.Element exposing (Element)
+import Text exposing (Text (..), fromString, color)
 
 chartWidth = 90
 chartHeight = 110
