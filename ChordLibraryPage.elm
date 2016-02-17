@@ -1,11 +1,11 @@
 module ChordLibraryPage (view) where
 
-import Types exposing (..)
 import App
-import ChordDrawing exposing (drawChordChart, fretboard)
 import ChordButton
+import Components.ChordChart exposing (chordChart)
 import Chords
 import TypedDict exposing (toList)
+import Types exposing (..)
 
 import Graphics.Element exposing (..)
 import Graphics.Collage exposing (collage, toForm)
@@ -19,7 +19,7 @@ view viewport chord address =
     let width = fst viewport
         chordButtonViews = flow right (map (ChordButton.view address) chordList)
         chordButtonListView = container width 200 middle chordButtonViews
-        activeChordView = collage width 200 [fretboard, drawChordChart chord]
+        activeChordView = chordChart chord
         layout = flow down [activeChordView, chordButtonListView]
     in [toForm layout] |> uncurry collage viewport
 

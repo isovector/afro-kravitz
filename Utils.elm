@@ -25,3 +25,5 @@ unsafeGet a i =
         Just x  -> x
         Nothing -> Debug.crash "you promised me this was safe"
 
+return : a -> List a
+return = flip (::) []

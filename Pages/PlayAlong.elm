@@ -1,7 +1,7 @@
 module Pages.PlayAlong where
 
 import App exposing (pageBox)
-import ChordDrawing exposing (drawChordChart, fretboard)
+import Components.ChordChart exposing (chordChart)
 import Chords
 import Components.KeySelector exposing (keySelector)
 import KeyUtils exposing (nameOfRelativeChord, scaleNote)
@@ -71,7 +71,7 @@ rhythmDots =
           << flip     List.map            barsList
           <| \meas -> List.map (dot meas) [0, 4, 8, 12]
 
-chordToPlay : Note -> ChordProgression -> Int -> Form
+chordToPlay : Note -> ChordProgression -> Int -> Element
 chordToPlay tonic prog meas =
     let idx = meas % (barsNumX * barsNumY)
         (num, qual) = case Array.get idx prog of
@@ -83,7 +83,7 @@ chordToPlay tonic prog meas =
         chart = case get chord Chords.knownChords of
             Just x  -> x
             Nothing -> []
-    in drawChordChart chart
+    in chordChart chart
 
 moveToTime : Int -> Int -> Form -> Form
 moveToTime meas sq = moveX (-barWidth * barsNumX / 2)
@@ -105,9 +105,8 @@ view viewport time tonic prog =
             [ scrubber time
             , bars
             , chordNames prog
-            , group [ fretboard
-                    , chordToPlay tonic prog time.measure
-                    ]
+            , chordToPlay tonic prog time.measure
+                |> toForm
                 |> moveX (barsNumX / 2 * barWidth)
                 |> moveX 100
             ]
