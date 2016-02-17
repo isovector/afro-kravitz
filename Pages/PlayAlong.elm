@@ -79,11 +79,7 @@ chordToPlay tonic prog meas =
             Nothing -> (0, Maj)
         template = getScaleTemplate Maj
         root = curry scaleNote tonic template num
-        chord = (root, qual)
-        chart = case get chord Chords.knownChords of
-            Just x  -> x
-            Nothing -> []
-    in chordChart chart
+    in chordChart (root, qual)
 
 moveToTime : Int -> Int -> Form -> Form
 moveToTime meas sq = moveX (-barWidth * barsNumX / 2)

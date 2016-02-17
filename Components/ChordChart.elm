@@ -1,11 +1,12 @@
-module Components.ChordChart (chordChart) where
+module Components.ChordChart (chordChart, chordChart') where
 
+import Chords exposing (getChordChart)
 import Types exposing (..)
 import Utils exposing (return)
 
 import Color exposing (grey, black, white, green)
 import Graphics.Collage exposing (Form (..), collage, toForm, text, filled, moveX, moveY, rect, circle, group)
-import Graphics.Element exposing (Element)
+import Graphics.Element exposing (Element, centered)
 import Text exposing (Text (..), fromString, color)
 
 chartWidth = 90
@@ -74,10 +75,13 @@ fretboard =
          ++ List.map makeString [1..6]
          |> group
 
-chordChart : ChordChart -> Element
-chordChart = collage chartWidth chartHeight
-          << ((::) fretboard)
-          << return
-          << group
-          << List.map drawFingering
+chordChart' : ChordChart -> Element
+chordChart' = collage chartWidth chartHeight
+           << ((::) fretboard)
+           << List.map drawFingering
+
+chordChart : Chord -> Element
+chordChart c = case getChordChart c of
+    Just chart -> chordChart' chart
+    Nothing    -> centered << fromString <| toString c
 
