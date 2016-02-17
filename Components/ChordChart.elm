@@ -29,6 +29,18 @@ fretY n = (n - 2) * -fretSpacing
 fretWidth : Fret -> Float
 fretWidth n = if n == 0 then 4 else 2
 
+chordChart : Chord -> Element
+chordChart c = 
+  case getChordChart c of
+    Just chart -> chordChart' chart
+    Nothing    -> centered << fromString <| toString c
+
+chordChart' : ChordChart -> Element
+chordChart' = 
+    collage chartWidth chartHeight
+      << ((::) fretboard)
+      << List.map drawFingering
+
 drawFinger : Int -> Fret -> GString -> Form
 drawFinger f fret s =
     let circ = circle fingerRadius
@@ -58,7 +70,8 @@ drawBarre f fret n1 n2 =
        |> group |> moveY (fretY (toFloat fret - 0.5))
 
 drawFingering : Fingering -> Form
-drawFingering fingering = case fingering of
+drawFingering fingering = 
+  case fingering of
     Finger finger fret string -> drawFinger finger fret string
     Barre  finger fret str1 str2 -> drawBarre finger fret str1 str2
 
@@ -74,14 +87,3 @@ fretboard =
        ] ++ List.map makeFret [0..4]
          ++ List.map makeString [1..6]
          |> group
-
-chordChart' : ChordChart -> Element
-chordChart' = collage chartWidth chartHeight
-           << ((::) fretboard)
-           << List.map drawFingering
-
-chordChart : Chord -> Element
-chordChart c = case getChordChart c of
-    Just chart -> chordChart' chart
-    Nothing    -> centered << fromString <| toString c
-

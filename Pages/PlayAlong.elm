@@ -40,6 +40,26 @@ barsList = [0 .. barsNumX * barsNumY - 1]
 semiquaverOffset : Int -> Float
 semiquaverOffset sq = toFloat sq * barWidth / 16 - barWidth / 32
 
+view : Viewport -> Timing -> Note -> ChordProgression -> Element
+view viewport time tonic prog =
+    flow down
+        [ collage (fst viewport) 200
+            [ scrubber time
+            , bars
+            , chordNames prog
+            , chordToPlay tonic prog time.measure
+                |> toForm
+                |> moveX (barsNumX / 2 * barWidth)
+                |> moveX 100
+            ]
+        , keySelector (flip App.PlayAlong prog) pageBox.address
+        ]
+
+scrubber : Timing -> Form
+scrubber time = rect 2 barHeight
+             |> filled red
+             |> moveToTime time.measure time.semiquaver
+
 bars : Form
 bars =
     let width = barWidth * barsNumX
@@ -88,24 +108,3 @@ moveToTime meas sq = moveX (-barWidth * barsNumX / 2)
                   >> moveX (toFloat <| meas % barsNumX * barWidth)
                   >> moveY
                     (toFloat <| (meas // barsNumX) % barsNumY * -barHeight)
-
-scrubber : Timing -> Form
-scrubber time = rect 2 barHeight
-             |> filled red
-             |> moveToTime time.measure time.semiquaver
-
-view : Viewport -> Timing -> Note -> ChordProgression -> Element
-view viewport time tonic prog =
-    flow down
-        [ collage (fst viewport) 200
-            [ scrubber time
-            , bars
-            , chordNames prog
-            , chordToPlay tonic prog time.measure
-                |> toForm
-                |> moveX (barsNumX / 2 * barWidth)
-                |> moveX 100
-            ]
-        , keySelector (flip App.PlayAlong prog) pageBox.address
-        ]
-
