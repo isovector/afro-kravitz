@@ -1,14 +1,16 @@
-module ChordDrawing
-    ( fretboard
-    , drawChordChart
-    ) where
+module Components.ChordChart (chordChart, chordChart') where
 
+import Chords exposing (getChordChart)
 import Types exposing (..)
+import Utils exposing (return)
 
-import Graphics.Collage exposing (Form (..), collage, toForm, text, filled, moveX, moveY, rect, circle, group)
 import Color exposing (grey, black, white, green)
+import Graphics.Collage exposing (Form (..), collage, toForm, text, filled, moveX, moveY, rect, circle, group)
+import Graphics.Element exposing (Element, centered)
 import Text exposing (Text (..), fromString, color)
 
+chartWidth = 90
+chartHeight = 110
 
 fingerColor = green
 stringSpacing = 15
@@ -26,6 +28,18 @@ fretY n = (n - 2) * -fretSpacing
 
 fretWidth : Fret -> Float
 fretWidth n = if n == 0 then 4 else 2
+
+chordChart : Chord -> Element
+chordChart c = 
+  case getChordChart c of
+    Just chart -> chordChart' chart
+    Nothing    -> centered << fromString <| toString c
+
+chordChart' : ChordChart -> Element
+chordChart' = 
+    collage chartWidth chartHeight
+      << ((::) fretboard)
+      << List.map drawFingering
 
 drawFinger : Int -> Fret -> GString -> Form
 drawFinger f fret s =
@@ -56,25 +70,20 @@ drawBarre f fret n1 n2 =
        |> group |> moveY (fretY (toFloat fret - 0.5))
 
 drawFingering : Fingering -> Form
-drawFingering fingering = case fingering of
+drawFingering fingering = 
+  case fingering of
     Finger finger fret string -> drawFinger finger fret string
     Barre  finger fret str1 str2 -> drawBarre finger fret str1 str2
 
-drawChordChart : ChordChart -> Form
-drawChordChart c = List.map drawFingering c |> group
-
 fretboard : Form
 fretboard =
-    let width = 90
-        height = 110
-        makeString gs = rect (stringWidth gs) height
+    let makeString gs = rect (stringWidth gs) chartHeight
                      |> filled black
                      |> moveX (stringX gs)
-        makeFret n = rect width (fretWidth n)
+        makeFret n = rect chartWidth (fretWidth n)
                   |> filled white
                   |> moveY (n |> toFloat >> fretY)
-    in [ rect width height |> filled grey
+    in [ rect chartWidth chartHeight |> filled grey
        ] ++ List.map makeFret [0..4]
          ++ List.map makeString [1..6]
          |> group
-

@@ -5,8 +5,11 @@ import Types exposing (..)
 import TypedDict exposing (..)
 
 
-knownChords : Map (Note, Quality) ChordChart
-knownChords = fromList (Typeclasses.liftOrd noteOrd qualityOrd)
+getChordChart : Chord -> Maybe ChordChart
+getChordChart = flip get knownChords
+
+knownChords : Map Chord ChordChart
+knownChords = fromList chordOrd
     [ ((A, Maj), a)
     , ((A, Min), am)
     , ((B, Maj), b)

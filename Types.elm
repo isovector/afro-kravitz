@@ -6,7 +6,6 @@ import Typeclasses
 type alias Viewport = (Int, Int)
 
 type alias GString = Int
-
 type alias Fret = Int
 type Fingering = Finger Int Fret GString
                | Barre Int Fret GString GString
@@ -19,6 +18,9 @@ qualityOrd  = Typeclasses.derivingOrd qualityEnum
 type Note = C | C' | D | D' | E | F | F' | G | G' | A | A' | B
 noteEnum = Typeclasses.derivingEnum [C, C', D, D', E, F, F', G, G', A, A', B]
 noteOrd  = Typeclasses.derivingOrd noteEnum
+
+type alias Chord = (Note, Quality)
+chordOrd = Typeclasses.liftOrd noteOrd qualityOrd
 
 type alias Semitone = Int
 type alias ScaleTemplate = Array Semitone -- length 7
