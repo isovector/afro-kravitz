@@ -11,7 +11,7 @@ import Graphics.Element exposing (..)
 import Graphics.Collage exposing (collage, toForm)
 import List exposing (map)
 
-chordList : List ChordButton.Model
+chordList : List Chord
 chordList = keys Chords.knownChords
 
 view : Viewport -> Chord -> Signal.Address App.Page -> Element
