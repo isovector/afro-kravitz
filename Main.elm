@@ -3,7 +3,7 @@ module Main where
 import App exposing (Page (..), pageSignal, pageBox)
 import Timing
 import Types exposing (..)
-import ChordLibraryPage
+import Pages.ChordLibrary
 import Pages.PlayAlong
 
 import Time exposing (Time)
@@ -17,8 +17,8 @@ main = Signal.map App.embedPageTemplate
 router : (Time, Page) -> Time -> Viewport -> Element
 router (start, page) now viewport =
     case page of
-        App.ChordLibraryPage chord ->
-            ChordLibraryPage.view viewport chord pageBox.address
+        App.ChordLibrary chord ->
+            Pages.ChordLibrary.view viewport chord pageBox.address
         About ->
             show "Ariel and Sandy are ridiculously sexy beasts. haha hahaa" -- About.view
         PlayAlong note prog ->

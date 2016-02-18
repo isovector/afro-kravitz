@@ -6,10 +6,9 @@ import ScaleTemplates exposing (..)
 import Time exposing (..)
 
 import Types exposing(..)
-import Chords
 
 type Page = About
-          | ChordLibraryPage ChordChart
+          | ChordLibrary Chord
           | PlayAlong Note ChordProgression
 
 pageBox : Signal.Mailbox Page
@@ -21,7 +20,10 @@ pageSignal = timestamp pageBox.signal
 
 embedPageTemplate : Element -> Element
 embedPageTemplate pageTemplate =
-    let pageChangeBtn = flip button "Push it baby"
+    let playAlongBtn = flip button "Play Along"
                      << Signal.message pageBox.address
                      <| PlayAlong G chordProgression
-    in flow down [pageTemplate, pageChangeBtn]
+        chordLibBtn = flip button "Chord Library"
+                      << Signal.message pageBox.address
+                      <| ChordLibrary (C, Maj)
+    in flow down [pageTemplate, playAlongBtn, chordLibBtn]
