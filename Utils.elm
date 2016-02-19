@@ -1,6 +1,7 @@
 module Utils where
 
 import Array exposing (Array, get)
+import String
 
 zip : List a -> List b -> List (a,b)
 zip xs ys =
@@ -19,11 +20,20 @@ genEnumFuncs es =
 firstOf : (a -> Bool) -> List a -> Maybe a
 firstOf f xs = List.head <| List.filter f xs
 
+fromJust : Maybe a -> a
+fromJust a = case a of
+    Just a  -> a
+    Nothing -> Debug.crash "fromJust on a Nothing"
+
 unsafeGet : Array a -> Int -> a
-unsafeGet a i =
-    case Array.get i a of
-        Just x  -> x
-        Nothing -> Debug.crash "you promised me this was safe"
+unsafeGet a i = fromJust <| Array.get i a
 
 return : a -> List a
 return = flip (::) []
+
+returnStr: Char -> String
+returnStr = String.fromList << return
+
+last : List a -> a
+last = fromJust << List.head << List.reverse
+

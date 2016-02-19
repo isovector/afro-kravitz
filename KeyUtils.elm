@@ -1,5 +1,5 @@
 module KeyUtils
-    ( semitonesAbove
+    ( intervalAbove
     , scaleNote
     , buildTriad
     , nameOfRelativeChord
@@ -26,12 +26,12 @@ nameOfRelativeChord c q =
         _ -> Debug.crash "that is not a chord"
 
 
-semitonesAbove : Note -> Semitone -> Note
-semitonesAbove n s = noteOrd.fromInt
-                  <| (noteOrd.toInt n + s) % noteEnum.count
+intervalAbove : Note -> Interval -> Note
+intervalAbove n s = noteOrd.fromInt
+                  <| (noteOrd.toInt n + intervalOrd.toInt s) % noteEnum.count
 
 scaleNote : Scale -> Int -> Note
-scaleNote (tonic, template) i = semitonesAbove tonic
+scaleNote (tonic, template) i = intervalAbove tonic
                              << unsafeGet template
                              <| i % noteEnum.count
 
