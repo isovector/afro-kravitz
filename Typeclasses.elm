@@ -1,8 +1,8 @@
 module Typeclasses where
 
--- Unfortunately we can't make a type for these typeclasses, because
--- elm's type system is shitty, so any function which uses one needs
--- to drop its type signature.
+import Char
+import Debug
+import Dict
 
 import Utils exposing (..)
 
@@ -39,4 +39,25 @@ liftOrd ordA ordB =
         , ordB.fromInt <| i %  ordB.count
         )
     }
+
+type alias Read a = String -> a
+derivingRead : Enum a -> Read a
+derivingRead enum =
+    let dict = Dict.fromList
+            << flip List.map enum.elems
+            <| \a -> (toString a, a)
+        safetyFirst a = case a of
+            Just x  -> x
+            Nothing -> Debug.crash "safety first"
+    in safetyFirst << flip Dict.get dict
+
+-- Common Types
+
+charOrd =
+    { elems = List.map Char.fromCode [0..255]
+    , count = 256
+    , toInt = Char.toCode
+    , fromInt = Char.fromCode
+    }
+charRead = List.head
 

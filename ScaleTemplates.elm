@@ -3,14 +3,32 @@ module ScaleTemplates where
 import Types exposing (..)
 import Array exposing (fromList, Array)
 
-buildTemplate : List Int -> Array Int
-buildTemplate = fromList << List.scanl (+) 0
+buildTemplate : List Interval -> Array Interval
+buildTemplate = fromList << (::) Per1
 
 maj : ScaleTemplate
-maj = buildTemplate [0, 2, 2, 1, 2, 2, 2, 1]
+maj = buildTemplate
+    [ Per1
+    , Tone
+    , Maj3
+    , Per4
+    , Per5
+    , Maj6
+    , Maj7
+    , Per8
+    ]
 
 harMin : ScaleTemplate
-harMin = buildTemplate [0, 2, 1, 2, 2, 1, 2, 1]
+harMin = buildTemplate
+    [ Per1
+    , Tone
+    , Min3
+    , Per4
+    , Per5
+    , Min6
+    , Maj7
+    , Per8
+    ]
 
 chordProgression : ChordProgression
 chordProgression = fromList
