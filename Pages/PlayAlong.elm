@@ -4,6 +4,7 @@ import App exposing (pageBox)
 import Chords
 import Components.ChordChart exposing (chordChart)
 import Components.KeySelector exposing (keySelector)
+import Components.TempoSelector exposing (tempoSelector)
 import KeyUtils exposing (nameOfRelativeChord, scaleNote)
 import ScaleTemplates exposing (getScaleTemplate)
 import Timing exposing (Timing)
@@ -52,7 +53,8 @@ view viewport time tonic prog =
                 |> moveX (barsNumX / 2 * barWidth)
                 |> moveX 100
             ]
-        , keySelector (flip App.PlayAlong prog) pageBox.address
+        , keySelector (\note -> App.PlayAlong note prog time.bpm) pageBox.address
+        , tempoSelector (\bpm -> App.PlayAlong tonic prog bpm) pageBox.address time.bpm
         ]
 
 scrubber : Timing -> Form

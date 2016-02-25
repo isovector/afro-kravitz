@@ -21,10 +21,10 @@ router (start, page) now viewport =
             Pages.ChordLibrary.view viewport chord pageBox.address
         About ->
             show "Ariel and Sandy are ridiculously sexy beasts. haha hahaa" -- About.view
-        PlayAlong note prog ->
+        PlayAlong note prog bpm ->
             Pages.PlayAlong.view
                 viewport
-                (Timing.computeTiming 120 start now)
+                (Timing.computeTiming bpm start now)
                 note
                 prog
 
