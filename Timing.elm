@@ -11,6 +11,7 @@ type alias Timing =
     , crotchet   : Int
     , minim      : Int
     , measure    : Int
+    , bpm        : Int
     }
 
 now : Signal Time
@@ -31,6 +32,7 @@ computeTiming bpm start now =
        , crotchet   = c
        , minim      = m
        , measure    = mm
+       , bpm        = bpm
        }
 
 bpmMailbox : Signal.Mailbox Content

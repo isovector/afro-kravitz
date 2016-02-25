@@ -9,11 +9,11 @@ import Types exposing(..)
 
 type Page = About
           | ChordLibrary Chord
-          | PlayAlong Note ChordProgression
+          | PlayAlong Note ChordProgression Int
 
 pageBox : Signal.Mailbox Page
 pageBox =
-    Signal.mailbox (PlayAlong C chordProgression)
+    Signal.mailbox (PlayAlong C chordProgression 120)
 
 pageSignal : Signal (Time, Page)
 pageSignal = timestamp pageBox.signal
@@ -22,7 +22,7 @@ embedPageTemplate : Element -> Element
 embedPageTemplate pageTemplate =
     let playAlongBtn = flip button "Play Along"
                      << Signal.message pageBox.address
-                     <| PlayAlong G chordProgression
+                     <| PlayAlong G chordProgression 120
         chordLibBtn = flip button "Chord Library"
                       << Signal.message pageBox.address
                       <| ChordLibrary (C, Maj)
