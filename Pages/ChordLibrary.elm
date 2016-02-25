@@ -1,7 +1,7 @@
 module Pages.ChordLibrary (view) where
 
-import App
-import ChordButton
+import App exposing (Page (ChordLibrary), pageBox)
+import Components.ChordButton
 import Components.ChordChart exposing (chordChart)
 import Chords
 import TypedDict exposing (toList, keys)
@@ -18,7 +18,7 @@ view : Viewport -> Chord -> Signal.Address App.Page -> Element
 view viewport chord address =
     let width = fst viewport
         height = (snd viewport) // 2
-        chordButtonViews = flow right (map (ChordButton.view address) chordList)
+        chordButtonViews = flow right (map (Components.ChordButton.view ChordLibrary pageBox.address) chordList)
         chordButtonListView = container width 200 middle chordButtonViews
         activeChordView = container width 200 middle (chordChart chord) 
         layout = flow down [activeChordView, chordButtonListView]
