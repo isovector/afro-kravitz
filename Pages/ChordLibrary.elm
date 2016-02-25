@@ -18,9 +18,11 @@ view : Viewport -> Chord -> Signal.Address App.Page -> Element
 view viewport chord address =
     let width = fst viewport
         height = (snd viewport) // 2
-        chordButtonViews = flow right (map (Components.ChordButton.view ChordLibrary pageBox.address) chordList)
-        chordButtonListView = container width 200 middle chordButtonViews
-        activeChordView = container width 200 middle (chordChart chord) 
-        layout = flow down [activeChordView, chordButtonListView]
-    in collage width height [toForm layout]
+        chordButtonView = Components.ChordButton.view ChordLibrary pageBox.address
+        chordButtonViews = flow right <| map chordButtonView chordList
+        layout = container width 200 middle 
+        chordButtonListView = layout chordButtonViews
+        activeChordView = layout <| chordChart chord
+        page = flow down [activeChordView, chordButtonListView]
+    in collage width height [toForm page]
 
