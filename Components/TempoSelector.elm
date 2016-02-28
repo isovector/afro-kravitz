@@ -9,7 +9,7 @@ import App exposing (tempoBox, Page (..))
 import Types exposing (..)
 import ScaleTemplates exposing (..)
 
-tempoSelector : Signal.Address a -> Content -> Element
+tempoSelector : Signal.Address Content -> Content -> Element
 tempoSelector address tempoContent = 
-    field defaultStyle (\content -> Signal.message tempoBox.address content) "120" tempoContent
+    field defaultStyle (Signal.message tempoBox.address) "120" tempoContent
 
