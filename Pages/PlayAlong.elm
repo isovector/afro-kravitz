@@ -1,6 +1,6 @@
 module Pages.PlayAlong where
 
-import App exposing (pageBox)
+import App exposing (pageBox, tempoBox)
 import Chords
 import Components.ChordChart exposing (chordChart)
 import Components.KeySelector exposing (keySelector)
@@ -27,6 +27,7 @@ import Graphics.Collage exposing
     , text
     , toForm
     )
+import Graphics.Input.Field exposing (..)
 import Graphics.Element exposing (Element, flow, down)
 import Text exposing (fromString)
 
@@ -41,8 +42,8 @@ barsList = [0 .. barsNumX * barsNumY - 1]
 semiquaverOffset : Int -> Float
 semiquaverOffset sq = toFloat sq * barWidth / 16 - barWidth / 32
 
-view : Viewport -> Timing -> Note -> ChordProgression -> Element
-view viewport time tonic prog =
+view : Viewport -> Timing -> Note -> ChordProgression -> Content -> Element
+view viewport time tonic prog tempoContent =
     flow down
         [ collage (fst viewport) 200
             [ scrubber time
@@ -53,8 +54,8 @@ view viewport time tonic prog =
                 |> moveX (barsNumX / 2 * barWidth)
                 |> moveX 100
             ]
-        , keySelector (\note -> App.PlayAlong note prog time.bpm) pageBox.address
-        , tempoSelector (\bpm -> App.PlayAlong tonic prog bpm) pageBox.address time.bpm
+        , keySelector (\note -> App.PlayAlong note prog) pageBox.address
+        , tempoSelector tempoBox.address tempoContent
         ]
 
 scrubber : Timing -> Form
