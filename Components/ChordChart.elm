@@ -45,7 +45,7 @@ chordChart' cc =
             if firstFret > 4
                then firstFret
                else 1
-        addFret delta finger = case finger of
+        addFret delta fingering = case fingering of
             Finger f fret s    -> Finger f (fret + delta) s
             Barre f fret s1 s2 -> Barre f (fret + delta) s1 s2
         adjustedChart = List.map (addFret <| -startingFret + 1) cc
