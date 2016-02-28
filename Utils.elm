@@ -37,3 +37,13 @@ returnStr = String.fromList << return
 last : List a -> a
 last = fromJust << List.head << List.reverse
 
+ordinal : Int -> String
+ordinal i = toString i ++ case i of
+    1  -> "st"
+    2  -> "nd"
+    3  -> "rd"
+    21 -> "st"
+    22 -> "nd"
+    23 -> "rd"
+    _  -> "th"
+
