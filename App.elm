@@ -18,7 +18,7 @@ pageBox =
 
 tempoBox : Signal.Mailbox Content
 tempoBox = 
-    Signal.mailbox noContent
+    Signal.mailbox { string = "120", selection = {start = 0, end = 0, direction =  Forward}}
 
 pageSignal : Signal (Time, Page)
 pageSignal = timestamp pageBox.signal
